@@ -1,0 +1,24 @@
+Please implement a dedicated Movies Feature, Movies Page, and an Admin Panel Movie Block into our AN TOONS website immediately. Modify the existing files inline without causing any file conflicts or breaking the Netflix dark layout:
+
+1. NAVBAR NAVIGATION:
+   - In the top sticky Navbar, connect the "Movies" link so that clicking it opens a new dedicated Movies Page view (e.g., at '/movies').
+
+2. DEDICATED MOVIES PAGE (Similar to Homepage):
+   - Design the Movies Page to look exactly like the premium Homepage: it must have its own high-quality Cinematic Movie Hero Banner at the top (with a Play button).
+   - Below the banner, display horizontal scrolling rows specifically for uploaded movies, such as "Trending Movies", "Popular Movies", and "Latest Movie Releases" featuring rounded-xl cards with smooth hover scale effects.
+
+3. ADMIN PANEL (Separate Movie Block):
+   - In the Admin Panel dashboard, add a distinct new section/tab titled "Manage Movies" (completely separate from the anime/episodes block).
+   - The Movie Add/Edit Form must include these fields only:
+     * Movie Title, Poster URL, Banner URL, Description, Genre, Rating, Status.
+   - For Languages & Quality: Implement the exact same fixed 4-language card slots (Hindi, English, Tamil, Japanese) just like the anime episodes feature. Each language slot must have its own 4 quality input fields: 360p Embed URL, 480p Embed URL, 720p Embed URL, and 1080p Embed URL.
+
+4. MOVIE WATCH INTERACTION & POINTER LOCK:
+   - When a user clicks a movie card on the Movies Page, it must open the Watch Page.
+   - The watch page must dynamically adapt for movies (meaning it should NOT display any Season dropdown or Episode list on the side, just show the Movie Description below the player).
+   - Display the dynamic Language Buttons ([Hindi], [English], [Tamil], [Japanese]) and Quality Buttons ([360p], [480p], [720p], [1080p]) below the player, rendering ONLY the languages that have links filled by the admin.
+   - Keep the pointer lock attribute (allow="pointer-lock") active so the standard cursor warning popup functions correctly.
+
+5. PERSISTENCE: Save all movie data directly into 'localStorage' alongside existing anime data so that added movies persist permanently on page refresh, browser restarts, and subsequent deployments.
+
+Acknowledge these architecture rules and update the existing workspace files cleanly now.
