@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Direct Database Configuration (No more variable dependencies)
+// Direct Database Configuration with Fresh Keys
 const supabaseUrl = 'https://supabase.co';
-const supabaseAnonKey = 'sb_publishable_8edbca9ec0670868f00db1019ffcd90d40237e13'; 
+const supabaseAnonKey = 'sb_publishable_9eEWaatZYtF8dGflNacSXQ_k1vgd3Ud'; 
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -17,20 +17,19 @@ export interface Anime {
   rating: number;
   status: "Ongoing" | "Completed" | "Upcoming";
 }
-const DEFAULT_MOVIES: Anime[] = [];
 
+const DEFAULT_MOVIES: Anime[] = [];
 
 export async function getAnimeList(): Promise<Anime[]> {
   try {
     const { data, error } = await supabase.from('movies').select('*');
     if (error || !data || data.length === 0) return DEFAULT_MOVIES;
     
-    return data.map((item: any) => ({
+    return (data as any[]).map((item: any) => ({
       id: item.id ? String(item.id) : String(item.id_num || Date.now()),
       title: item.title || "Untitled Anime",
-     posterUrl: item.posterUrl || "",
-bannerUrl: item.posterUrl || "",
-
+      posterUrl: item.posterUrl || "", 
+      bannerUrl: item.posterUrl || "", 
       videoUrl: item.videoUrl || "",
       description: "Cloud Streamed Anime Series",
       genres: ["Anime"],
