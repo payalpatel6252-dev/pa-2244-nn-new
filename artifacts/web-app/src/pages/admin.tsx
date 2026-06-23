@@ -288,11 +288,12 @@ export default function Admin() {
 
   if (!isAuthenticated) return <AdminLogin onSuccess={() => setIsAuthenticated(true)} />;
 
-  const handleSaveAnime = () => {
+   const handleSaveAnime = async () => {
     if (!editingAnime?.title || !editingAnime?.posterUrl) {
       toast.error("Title and Poster URL are required");
       return;
     }
+
     const newAnime: Anime = {
       id: editingAnime.id || Date.now().toString(),
       title: editingAnime.title,
@@ -300,22 +301,32 @@ export default function Admin() {
       bannerUrl: editingAnime.bannerUrl || "",
       description: editingAnime.description || "",
       seoDescription: editingAnime.seoDescription || "",
-      genres: Array.isArray(editingAnime.genres) ? editingAnime.genres : [],
+      genres: Array.isArray(editingAnime.genres) ? editingAnime.genres : ["Anime"],
       rating: editingAnime.rating || 0,
       status: editingAnime.status || "Ongoing",
     };
-    let updatedList;
-    if (editingAnime.id) {
-      updatedList = animeList.map(a => a.id === editingAnime.id ? newAnime : a);
-      toast.success("Anime updated");
-    } else {
-      updatedList = [...animeList, newAnime];
-      toast.success("Anime added");
+
+    try {
+      // Supabase cloud data connector sync
+      await (saveAnime as any)(newAnime);
+
+
+      
+      let updatedList;
+      if (editingAnime.id) {
+        updatedList = animeList.map(a => a.id === editingAnime.id ? newAnime : a);
+        toast.success("Anime updated successfully in Cloud");
+      } else {
+        updatedList = [...animeList, newAnime];
+        toast.success("Anime added successfully to Cloud");
+      }
+      
+      setAnimeList(updatedList);
+      setShowAnimeForm(false);
+      setEditingAnime(null);
+    } catch (error) {
+      toast.error("Cloud database synchronization failed");
     }
-    saveAnime(updatedList);
-    setAnimeList(updatedList);
-    setShowAnimeForm(false);
-    setEditingAnime(null);
   };
 
   const handleDeleteAnime = (id: string) => {
