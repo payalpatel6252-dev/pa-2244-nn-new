@@ -17,13 +17,8 @@ export interface Anime {
   rating: number;
   status: "Ongoing" | "Completed" | "Upcoming";
 }
+const DEFAULT_MOVIES: Anime[] = [];
 
-// DEFAULT INITIAL CARDS (Fallback systems)
-const DEFAULT_MOVIES: Anime[] = [
-  { id: "1", title: "Solo Leveling", posterUrl: "https://tmdb.org", bannerUrl: "https://tmdb.org", description: "Action Anime", genres: ["Action"], rating: 8.9, status: "Ongoing" },
-  { id: "2", title: "Attack on Titan", posterUrl: "https://tmdb.org", bannerUrl: "https://tmdb.org", description: "Thriller Anime", genres: ["Thriller"], rating: 9.1, status: "Completed" },
-  { id: "3", title: "One Piece", posterUrl: "https://tmdb.org", bannerUrl: "https://tmdb.org", description: "Adventure Anime", genres: ["Adventure"], rating: 8.8, status: "Ongoing" }
-];
 
 export async function getAnimeList(): Promise<Anime[]> {
   try {
@@ -33,8 +28,9 @@ export async function getAnimeList(): Promise<Anime[]> {
     return data.map((item: any) => ({
       id: item.id ? String(item.id) : String(item.id_num || Date.now()),
       title: item.title || "Untitled Anime",
-      posterUrl: item.posterUrl || "https://tmdb.org", 
-      bannerUrl: item.posterUrl || "https://tmdb.org", 
+     posterUrl: item.posterUrl || "",
+bannerUrl: item.posterUrl || "",
+
       videoUrl: item.videoUrl || "",
       description: "Cloud Streamed Anime Series",
       genres: ["Anime"],
