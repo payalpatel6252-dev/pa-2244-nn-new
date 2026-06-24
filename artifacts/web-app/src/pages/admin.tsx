@@ -291,7 +291,7 @@ export default function Admin() {
 
   if (!isAuthenticated) return <AdminLogin onSuccess={() => setIsAuthenticated(true)} />;
 
-   const handleSaveAnime = async () => {
+    const handleSaveAnime = async () => {
     if (!editingAnime?.title || !editingAnime?.posterUrl) {
       toast.error("Title and Poster URL are required");
       return;
@@ -309,19 +309,30 @@ export default function Admin() {
       status: editingAnime.status || "Ongoing",
     };
 
-       try {
-      // Direct raw connection trigger using direct state variables
+    try {
       const { supabase } = await import("../lib/storage");
       
       await supabase.from('movies').insert([{
-        title: typeof title !== 'undefined' ? title : (newAnime.title || "Untitled"),
-        posterUrl: typeof posterUrl !== 'undefined' ? posterUrl : (newAnime.posterUrl || ""),
-        videoUrl: typeof videoUrl !== 'undefined' ? videoUrl : ((editingAnime as any)?.videoUrl || "")
+        title: typeof title !== 'undefined' && title !== "" ? title : newAnime.title,
+        posterUrl: typeof posterUrl !== 'undefined' && posterUrl !== "" ? posterUrl : newAnime.posterUrl,
+        videoUrl: typeof videoUrl !== 'undefined' && videoUrl !== "" ? videoUrl : ((editingAnime as any)?.videoUrl || "")
       }]);
       
       let updatedList = [...animeList, newAnime];
       toast.success("Anime added successfully to Cloud Database!");
       setAnimeList(updatedList);
+      setShowAnimeForm(false);
+      setEditingAnime(null);
+     } catch (error) {
+      toast.error("Cloud database synchronization failed");
+    }
+ 
+
+      
+  
+
+  
+
 
 
 
