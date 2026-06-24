@@ -311,7 +311,14 @@ export default function Admin() {
 
     try {
       // Supabase cloud data connector sync
-      await (saveAnime as any)(newAnime);
+            // Direct raw connection trigger to database client
+      const { supabase } = await import("../lib/storage");
+      await supabase.from('movies').insert([{
+        title: newAnime.title,
+        posterUrl: newAnime.posterUrl,
+        videoUrl: (editingAnime as any)?.videoUrl || ""
+      }]);
+
 
 
       
