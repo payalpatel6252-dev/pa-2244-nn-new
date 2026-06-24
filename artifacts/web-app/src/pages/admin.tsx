@@ -309,15 +309,20 @@ export default function Admin() {
       status: editingAnime.status || "Ongoing",
     };
 
-    try {
-      // Supabase cloud data connector sync
-            // Direct raw connection trigger to database client
+       try {
+      // Direct raw connection trigger using direct state variables
       const { supabase } = await import("../lib/storage");
+      
       await supabase.from('movies').insert([{
-        title: newAnime.title,
-        posterUrl: newAnime.posterUrl,
-        videoUrl: (editingAnime as any)?.videoUrl || ""
+        title: typeof title !== 'undefined' ? title : (newAnime.title || "Untitled"),
+        posterUrl: typeof posterUrl !== 'undefined' ? posterUrl : (newAnime.posterUrl || ""),
+        videoUrl: typeof videoUrl !== 'undefined' ? videoUrl : ((editingAnime as any)?.videoUrl || "")
       }]);
+      
+      let updatedList = [...animeList, newAnime];
+      toast.success("Anime added successfully to Cloud Database!");
+      setAnimeList(updatedList);
+
 
 
 
