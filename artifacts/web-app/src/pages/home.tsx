@@ -3,7 +3,8 @@
 import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
 import { AnimeRow } from "@/components/AnimeRow";
-import { getAnime, Anime } from "../lib/storage";
+import { getAnimeList, Anime } from "../lib/storage";
+
 
 import { AnimeCard } from "@/components/AnimeCard";
 import { AdSlot } from "@/components/AdSlot";
@@ -21,10 +22,11 @@ export default function Home() {
     ogType: "website",
   });
   useEffect(() => {
-    getAnime().then((data) => {
+    getAnimeList().then((data) => {
       setAnimeList(data || []);
     }).catch(() => {});
   }, []);
+
 
 
   const filteredAnime = animeList.filter((a) =>

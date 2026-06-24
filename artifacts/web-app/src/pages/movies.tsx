@@ -6,7 +6,8 @@ import { MovieRow } from "@/components/MovieRow";
 import { MovieCard } from "@/components/MovieCard";
 import { AdSlot } from "@/components/AdSlot";
 import { useSEO } from "@/hooks/use-seo";
-import { getAnime as getMovies, Movie } from "../lib/storage";
+import { getAnimeList as getMovies, Anime as Movie } from "../lib/storage";
+
 
 
 export default function Movies() {
@@ -19,12 +20,13 @@ export default function Movies() {
     keywords: "anime movies, watch anime movies online, anime movies hindi dub, anime movies sub dub, an toons movies, anime films",
     ogType: "website",
   });
-  useEffect(() => {
-    // Cloud database fetch connector
+    useEffect(() => {
+    // Cloud database fetch connector for movies page
     getMovies().then((data) => {
       setMovies(data || []);
     }).catch(() => {});
   }, []);
+
 
 
   const filtered = movies.filter(m =>
