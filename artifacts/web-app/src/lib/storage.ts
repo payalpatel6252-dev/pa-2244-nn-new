@@ -1,7 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Direct Database Configuration with Fresh Keys
-const supabaseUrl = 'https://supabase.co';
+// Asli Real-time Database Link aur Keys
+const supabaseUrl = 'https://fmbbokjtgxscjowwzvzq.supabase.co';
+
 const supabaseAnonKey = 'sb_publishable_9eEWaatZYtF8dGflNacSXQ_k1vgd3Ud'; 
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -22,10 +23,17 @@ const DEFAULT_MOVIES: Anime[] = [];
 
 export async function getAnimeList(): Promise<Anime[]> {
   try {
-    const { data, error } = await supabase.from('movies').select('*');
-    if (error || !data || data.length === 0) return DEFAULT_MOVIES;
+    // Direct raw network pipeline bypass to avoid browser caching
+    const response = await fetch(`${supabaseUrl}/rest/v1/movies?select=*`, {
+      headers: {
+        'apikey': supabaseAnonKey,
+        'Authorization': `Bearer ${supabaseAnonKey}`
+      }
+    });
+    const data = await response.json();
+    if (!data || data.length === 0 || data.error) return DEFAULT_MOVIES;
     
-    return (data as any[]).map((item: any) => ({
+    return data.map((item: any) => ({
       id: item.id ? String(item.id) : String(item.id_num || Date.now()),
       title: item.title || "Untitled Anime",
       posterUrl: item.posterUrl || "", 
@@ -42,11 +50,22 @@ export async function getAnimeList(): Promise<Anime[]> {
 }
 
 export async function saveAnime(anime: Anime): Promise<void> {
-  await supabase.from('movies').insert([{
-    title: anime.title,
-    posterUrl: anime.posterUrl,
-    videoUrl: (anime as any).videoUrl || ""
-  }]);
+  try {
+    await fetch(`${supabaseUrl}/rest/v1/movies`, {
+      method: 'POST',
+      headers: {
+        'apikey': supabaseAnonKey,
+        'Authorization': `Bearer ${supabaseAnonKey}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        title: anime.title,
+        posterUrl: anime.posterUrl,
+        videoUrl: (anime as any).videoUrl || ""
+      })
+    });
+  } catch (e) {}
 }
 
 export async function getAdsConfig() { return null; }
